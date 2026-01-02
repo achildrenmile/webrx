@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Impressum & Datenschutz</title>
+  <style>
+    /* General styles for all screen sizes */
+    a {
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    a:hover {
+      color: #0056b3;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: auto;
+      /* Ensure no overflow, preventing the need for scrolling */
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+      flex-shrink: 0;
+    }
+
+    header {
+      width: 100%;
+      height: 180px;
+      background: linear-gradient(
+        45deg,
+        #1A1F2F,
+        #232838,
+        #2A3040,
+        #232838,
+        #1A1F2F
+      );
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    /* Smooth gradient animation */
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Optional overlay to add depth */
+    header::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(
+        circle at top right,
+        rgba(255, 255, 255, 0.03),
+        transparent 50%
+      );
+    }
+
+    header img {
+      width: 150px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 12px;
+    }
+
+    main {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px 0;
+      flex-shrink: 0;
+      background: linear-gradient(
+        45deg,
+        #1A1F2F,
+        #232838,
+        #2A3040,
+        #232838,
+        #1A1F2F
+      );
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: #ffffff;
+      position: relative;
+    }
+
+    footer a {
+      color: #00C6FF;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: #2EE59D;
+    }
+
+    footer::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(
+        circle at top right,
+        rgba(255, 255, 255, 0.03),
+        transparent 50%
+      );
+      pointer-events: none;
+    }
+
+    /* Base header height for desktop */
+    header {
+      width: 100%;
+      height: 150px;  /* Default height for desktop */
+      background: linear-gradient(
+        45deg,
+        #1A1F2F,
+        #232838,
+        #2A3040,
+        #232838,
+        #1A1F2F
+      );
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    /* Optimize for small devices (smartphones, screens up to 600px) */
+    @media (max-width: 600px) {
+      header {
+        padding: 10px 0;
+        height: 80px;  /* Smaller height for mobile */
+      }
+
+      header img {
+        width: 80px;
+      }
+
+      header h1 {
+        font-size: 12px;
+      }
+
+      footer {
+        font-size: 14px;
+		padding-right:15px;
+		padding-left:15px;
+      }
+    }
+
+    /* Optimize for tablets (screens between 600px and 800px) */
+    @media (min-width: 601px) and (max-width: 800px) {
+      header {
+        padding: 15px 0;
+        height: 110px;  /* Medium height for tablets */
+      }
+
+      header img {
+        width: 100px;
+      }
+
+      header h1 {
+        font-size: 17px;
+      }
+
+      footer {
+        font-size: 15px;
+		padding-right:15px;
+		padding-left:15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<a>
+  <header>
+    <img src="images/webrxAT.png" alt="WebRX.at">
+  </header>
+</a>
+
+  <main>
+    <h4>Impressum</h4>
+    <p><b>Informationen und Offenlegung gemäß 5 (1) ECG, § 25 MedienG, § 63 GewO und § 14 UGB</b></p>
+    <p><b>Webseitenbetreiber:</b> Michael Linder</p>
+    <p><b>Anschrift:</b> Nötsch 55, 9611 Nötsch im Gailtal</p>
+    <p><b>Kontaktdaten:</b> <br> Email: oe8yml@rednil.at</p>
+    <p><b>Anwendbare Rechtsvorschrift:</b> www.ris.bka.gv.at</p>
+    <p><b>Online Streitbeilegung:</b> Verbraucher, welche in Österreich oder in einem sonstigen Vertragsstaat der ODR-VO niedergelassen sind, haben die Möglichkeit Probleme bezüglich dem entgeltlichen Kauf von Waren oder Dienstleistungen im Rahmen einer Online-Streitbeilegung (nach OS, AStG) zu lösen. Die Europäische Kommission stellt eine Plattform hierfür bereit: https://ec.europa.eu/consumers/odr</p>
+    <p><b>Urheberrecht:</b> Die Inhalte dieser Webseite unterliegen, soweit dies rechtlich möglich ist, diversen Schutzrechten (z.B dem Urheberrecht). Jegliche Verwendung/Verbreitung von bereitgestelltem Material, welche urheberrechtlich untersagt ist, bedarf schriftlicher Zustimmung des Webseitenbetreibers.</p>
+    <p><b>Haftungsausschluss:</b> Trotz sorgfältiger inhaltlicher Kontrolle übernimmt der Webseitenbetreiber dieser Webseite keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich. Sollten Sie dennoch auf ausgehende Links aufmerksam werden, welche auf eine Webseite mit rechtswidriger Tätigkeit/Information verweisen, ersuchen wir um dementsprechenden Hinweis, um diese nach § 17 Abs. 2 ECG umgehend zu entfernen.<br>Die Urheberrechte Dritter werden vom Betreiber dieser Webseite mit größter Sorgfalt beachtet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden derartiger Rechtsverletzungen werden wir den betroffenen Inhalt umgehend entfernen.</p>
+  </main>
+
+  <footer>
+    <p>Connecting voices, bridging worlds - Amateur Radio Unites us all! If you want to add a RX let <a
+        href="mailto:admins@webrx.at">us</a> know. You want to build one? Thanks to OE8CXC, here is a <a
+        href="./docs/Anleitung.pdf" target="_blank">Quick start Guide</a>.
+    <p>
+    <p><a href="/imprint.htm" target="_blank">Imprint & Data protection(in German)</a>
+  </footer>
+
+</body>
+
+</html>

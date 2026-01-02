@@ -1,0 +1,91 @@
+[
+  {
+    "id": 0,
+    "name": "<a href=\"https://www.qrz.com/db/OE8YML\" target=\"_blank\">OE8YML</a>  WebRX Nötsch JN66to",
+    "lat": 46.5886,
+    "lng": 13.6204,
+    "sdrlink": "https://oe8yml.webrx.at",
+    "info": "<b>Hardware:</b> Raspberry PI4B / NOOELEC RTL2832U - Currently only one rx [1] is installed so, be aware that one rx session for all users. Patience is the key.<br><b>Antenna:</b> D130J<br><br>Band support will be adapted frequently.<br>"
+  },
+  {
+    "id": 2,
+    "name": "<a href=\"https://www.qrz.com/db/OE7HEK\" target=\"_blank\">OE7HEK</a> WebRX Kaiserwinkl JN67ep",
+    "lat": 47.6644,
+    "lng": 12.4065,
+    "sdrlink": "https://sdr-kaiserwinkl.net",
+    "info": "<b>Hardware</b>:<br><b>Antenna</b>:"
+  },
+  {
+    "id": 3,
+    "name": "Web SDR Chiemgau JN67jv",
+    "lat": 47.875,
+    "lng": 12.75,
+    "sdrlink": "http://chiemgau.spdns.de",
+    "info": "<b>Hardware</b>:<br><b>Antenna</b>:"
+  },
+  {
+    "id": 4,
+    "name": "Der 11m Web-SDR im Mühlviertel JN78gn",
+    "lat": 48.5486555,
+    "lng": 14.5359689,
+    "sdrlink": "https://freistadt.my-sdr.net",
+    "info": "<b>Hardware</b>:<br><b>Antenna</b>:"
+  },
+  {
+    "id": 5,
+    "name": "<a href=\"https://www.qrz.com/db/OE8CXC\" target=\"_blank\">OE8CXC</a> WebRX Spittal JN66ss",
+    "lat": 46.789921,
+    "lng": 13.513257,
+    "sdrlink": "https://oe8cxc.webrx.at",
+    "info": "<b>Hardware</b>: Raspberry PI 4B+ / DVB-T Stick with RTL2832U - Patience is the key.<br><b>Antenna</b>: X300 <br><br><br>"
+  },
+  {
+    "id": 6,
+    "name": "<a href=\"https://www.qrz.com/db/OE8CNI\" target=\"_blank\">OE8CNI</a> WebRX Maria Rain JN76dn",
+    "lat": 46.56,
+    "lng": 14.284,
+    "sdrlink": "http://oe8cni.webrx.at",
+    "info": "<b>Hardware</b>: Raspberry PI 4B+ /  NOOELEC RTL2832U - Currently only one rx [1] is installed so, be aware that one rx session for all users. Patience is the key.<br><b>Antenna</b>: ICOM AH-8000<br><br><br>"
+  },
+  {
+    "id": 7,
+    "name": "<a href=\"https://www.qrz.com/db/OE8KKK\" target=\"_blank\">OE8KKK</a> WebRX Ferlach, Austria | Loc: JN76dm, ASL: 462 m",
+    "lat": 46.521,
+    "lng": 14.292,
+    "sdrlink": "http://oe8kkk.webrx.at/",
+    "info": "<b>Hardware</b>: Raspberry PI 3B /  NOOELEC RTL2832U<br><b>Antenna</b>:TRIVAL AD23/207-A 6dB 145 9dB 435"
+  },
+  {
+    "id": 8,
+    "name": "<a href=\"https://www.qrz.com/db/OE3FJS\" target=\"_blank\">OE3FJS</a> WebRX Furth an der Triesting JN88aa",
+    "lat": 47.973,
+    "lng": 15.976,
+    "sdrlink": "http://oe3fjs.webrx.at/",
+    "info": "<b>Hardware</b>: Raspberry PI 3B+ /  RTL Stick V3 RTL2832U - Currently only one rx is installed so, be aware that one rx session for all users. Patience is the key.<br><b>Antenna</b>: X300<br><br><br>"
+  },
+  {
+    "id": 9,
+    "name": "<a href=\"https://www.qrz.com/db/OE8HSF\" target=\"_blank\">OE8HSF</a> Knappenberg ASL:1060m JN76gw",
+    "lat": 46.937,
+    "lng": 14.542,
+    "sdrlink": "http://oe8hsf.ddns.net/",
+    "info": "<b>Hardware</b>:<br><b>Antenna</b>:"
+  },
+  {
+    "id": 10,
+    "name": "<a href=\"https://www.qrz.com/db/OE8MPR\" target=\"_blank\">OE8MPR</a> Goesselsdorf, Austria | Loc: JN76hn, ASL: 490 m",
+    "lat": 46.562,
+    "lng": 14.625,
+    "sdrlink": "https://openwebrx.mpdx.at/",
+    "info": "<b> Hardware: </b>Server: Raspbery Pi 4<br>Receiver: 2x RTL-SDR <br>- Version 3 for 2m and DAB+<br>- Version 4 for Shortwave<br><b>Antenna:</b> Diamond D130NJ with Duplexer for both SDR Sticks<br><br>More informations on my website: <a href='https://www.mpdx.at'>www.mpdx.at</a></div>"
+  },
+  {
+    "id": 11,
+    "name": "<a href=\"https://www.qrz.com/db/OE8JHK\" target=\"_blank\">OE8JHK</a> Köttmannsdorf, Austria | Loc: JN76cn, ASL: 580 m",
+    "lat": 46.562,
+    "lng": 14.208,
+    "sdrlink": "https://x8.jesenko.at/",
+    "info": "<b>Hardware</b>: Raspberry PI 3B /  DVB-T Stick<br><b>Antenna</b>:"
+  }
+
+]

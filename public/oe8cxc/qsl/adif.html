@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QSO Card Generator</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div class="container my-5">
+        <h1 class="text-center">QSO Card Generator by OE8CXC</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8 canvas-container" style="display:flex;justify-content:center">
+                <canvas id="qslCanvas" style="width:50vw"></canvas>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <button id="downloadBtn" class="btn btn-warning">Generate QSL Cards</button>
+        </div>
+        <form class="mt-3 data" onsubmit="return false;">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="adiUrl">ADI File URL</label>
+                    <input type="text" class="form-control" id="adiUrl" placeholder="Enter ADI file URL">
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        const canvas = document.getElementById('qslCanvas');
+        const context = canvas.getContext('2d');
+        const image = new Image();
+
+        const SCALE_FACTOR = 0.4;
+
+        image.onload = function () {
+            canvas.width = image.width * SCALE_FACTOR;
+            canvas.height = image.height * SCALE_FACTOR;
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        };
+
+        image.src = "QSL-Karte_FULL.jpg";
+
+        function drawQSLCard(data) {
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+            const callsign = data.call || '';
+            const utcDateTime = data.qso_date + ' ' + data.time_on;
+            const frequency = data.freq || '';
+            const mode = data.mode || '';
+            const rst = data.rst_sent || '';
+            const additional = data.comment || "Thanks for the QSO\nBest regards";
+
+            const dateObj = new Date(
+                utcDateTime.substring(0, 4),
+                utcDateTime.substring(4, 6) - 1,
+                utcDateTime.substring(6, 8),
+                utcDateTime.substring(9, 11),
+                utcDateTime.substring(11, 13)
+            );
+
+            const formattedDateTime =
+                padZero(dateObj.getDate()) + '.' +
+                padZero(dateObj.getMonth() + 1) + '.' +
+                dateObj.getFullYear() + ' ' +
+                padZero(dateObj.getHours()) + ':' +
+                padZero(dateObj.getMinutes());
+
+            context.font = 100 * SCALE_FACTOR + 'px Arial';
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.fillStyle = 'black';
+
+            const positions = {
+                callsign: { x: 3368.3, y: 2026.3 },
+                utcDateTime: { x: 2623.1, y: 2498.7 },
+                frequency: { x: 3397.5, y: 2498.7 },
+                mode: { x: 3905.7, y: 2498.7 },
+                rst: { x: 4353.3, y: 2498.7 },
+                additional: { x: 2026.9, y: 2759.6 }
+            };
+
+            context.fillText(callsign.toUpperCase(), positions.callsign.x * SCALE_FACTOR, positions.callsign.y * SCALE_FACTOR);
+
+            context.font = 80 * SCALE_FACTOR + 'px Arial';
+            context.fillText(formattedDateTime, positions.utcDateTime.x * SCALE_FACTOR, positions.utcDateTime.y * SCALE_FACTOR);
+
+            context.font = 100 * SCALE_FACTOR + 'px Arial';
+            context.fillText(frequency, positions.frequency.x * SCALE_FACTOR, positions.frequency.y * SCALE_FACTOR);
+            context.fillText(mode.toUpperCase(), positions.mode.x * SCALE_FACTOR, positions.mode.y * SCALE_FACTOR);
+            context.fillText(rst, positions.rst.x * SCALE_FACTOR, positions.rst.y * SCALE_FACTOR);
+
+            const additionalLines = additional.split("\n");
+
+            context.textAlign = 'left';
+            context.textBaseline = 'top';
+            context.font = 'bold ' + 100 * SCALE_FACTOR + 'px Arial';
+
+            context.fillText(additionalLines[0] ?? "", positions.additional.x * SCALE_FACTOR, positions.additional.y * SCALE_FACTOR);
+            context.fillText(additionalLines[1] ?? "", positions.additional.x * SCALE_FACTOR, positions.additional.y * SCALE_FACTOR + (120 * SCALE_FACTOR));
+        }
+
+        const padZero = (num) => num.toString().padStart(2, '0');
+
+        async function fetchAndParseADI(url) {
+            const response = await fetch(url);
+            const text = await response.text();
+            const adifParser = new ADIFParser();
+            return adifParser.parse(text);
+        }
+
+        document.getElementById('downloadBtn').addEventListener('click', async function () {
+            const adiUrl = document.getElementById('adiUrl').value;
+            const qsoData = await fetchAndParseADI(adiUrl);
+
+            const infoContent = [];
+
+            qsoData.records.forEach(record => {
+                drawQSLCard(record);
+                const callsign = record.call || 'XYZ';
+                const email = record.email;
+
+                infoContent.push(`${callsign} = ${email ?? "?"}`);
+
+                const filename = `${callsign.toUpperCase()}.png`;
+
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+
+            const infoBlob = new Blob([infoContent.join('\n')], { type: 'text/plain' });
+            const infoUrl = URL.createObjectURL(infoBlob);
+            const infoLink = document.createElement('a');
+            infoLink.download = 'info.txt';
+            infoLink.href = infoUrl;
+            infoLink.click();
+        });
+
+        class ADIFParser {
+            parse(text) {
+                const records = [];
+                const lines = text.split('\n');
+
+                let record = {};
+                lines.forEach(line => {
+                    if (line.startsWith('<eor>')) {
+                        records.push(record);
+                        record = {};
+                    } else {
+                        const matches = line.match(/<(.+?):(\d+).*>(.+)/);
+                        if (matches) {
+                            const [, field, , value] = matches;
+                            record[field.toLowerCase()] = value;
+                        }
+                    }
+                });
+
+                return { records };
+            }
+        }
+    </script>
+</body>
+
+</html>
