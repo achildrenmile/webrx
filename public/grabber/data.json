@@ -1,10 +1,10 @@
 {
-  "last_checked": "2026-01-02 20:01:44",
+  "last_checked": "2026-01-02 20:03:22",
   "sdr_status": [
     {
       "id": 0,
       "status": 2,
-      "ping": 699,
+      "ping": 290,
       "frequencies": [
         3.7,
         4,
@@ -56,13 +56,13 @@
     {
       "id": 5,
       "status": 1,
-      "ping": 635,
+      "ping": 274,
       "frequencies": []
     },
     {
       "id": 6,
       "status": 2,
-      "ping": 713,
+      "ping": 259,
       "frequencies": [
         0.3,
         1.9,
@@ -119,7 +119,7 @@
     {
       "id": 8,
       "status": 2,
-      "ping": 795,
+      "ping": 392,
       "frequencies": [
         145,
         438.8,
@@ -129,7 +129,7 @@
     {
       "id": 9,
       "status": 2,
-      "ping": 782,
+      "ping": 337,
       "frequencies": [
         1.9,
         3.8,
@@ -160,7 +160,7 @@
     {
       "id": 10,
       "status": 2,
-      "ping": 1108,
+      "ping": 482,
       "frequencies": [
         1.1,
         3.7,
