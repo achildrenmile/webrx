@@ -7,7 +7,6 @@ An interactive map application for Software Defined Radio (SDR) receiver station
 - Interactive map showing WebRX station locations
 - Real-time status monitoring of SDR stations
 - Frequency display for operational stations
-- QSL card generator for amateur radio operators
 - OpenStreetMap tile proxy for local caching
 
 ## Tech Stack
@@ -34,7 +33,7 @@ npm run dev
 npm start
 ```
 
-The server will start on `http://localhost:3000` (or the port specified in the `PORT` environment variable).
+The server will start on `http://localhost:3300` (or the port specified in the `PORT` environment variable).
 
 ## API Endpoints
 
