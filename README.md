@@ -35,11 +35,38 @@ npm start
 
 The server will start on `http://localhost:3300` (or the port specified in the `PORT` environment variable).
 
-## Docker
+## Docker Deployment
 
-### Using Docker Compose (Recommended)
+### Quick Start
 ```bash
+# Clone and run
+git clone https://github.com/achildrenmile/webrx.git
+cd webrx
 docker compose up -d
+```
+
+The application will be available at `http://localhost:3300`
+
+### Container Management
+
+```bash
+# Start the container
+docker compose up -d
+
+# Stop the container
+docker compose down
+
+# Restart the container
+docker compose restart
+
+# View logs
+docker compose logs -f
+
+# View container status
+docker compose ps
+
+# Rebuild after code changes
+docker compose up -d --build
 ```
 
 ### Using Docker directly
@@ -49,15 +76,43 @@ docker build -t webrx .
 
 # Run the container
 docker run -d -p 3300:3300 --name webrx webrx
+
+# Stop
+docker stop webrx
+
+# Start
+docker start webrx
+
+# View logs
+docker logs -f webrx
+
+# Remove container
+docker rm -f webrx
 ```
 
 ### Environment Variables
-- `PORT` - Server port (default: 3300)
-- `NODE_ENV` - Environment mode (default: production)
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PORT` | 3300 | Server port |
+| `NODE_ENV` | production | Environment mode |
 
 ### Volumes
-- `./public/locations.json` - Station configuration (read-only mount)
-- `webrx-cache` - SDR status cache data
+| Path | Description |
+|------|-------------|
+| `./public/locations.json` | Station configuration (read-only) |
+| `webrx-cache` | SDR status cache data |
+
+### Custom Port
+```bash
+# Run on port 8080
+PORT=8080 docker compose up -d
+```
+
+### Health Check
+The container includes a health check that verifies the server is responding. View health status:
+```bash
+docker inspect --format='{{.State.Health.Status}}' webrx
+```
 
 ## API Endpoints
 
