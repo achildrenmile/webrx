@@ -6,12 +6,19 @@
     "start": "node src/server.js",
     "dev": "node --watch src/server.js"
   },
-  "keywords": ["webrx", "sdr", "amateur-radio", "openstreetmap"],
+  "keywords": [
+    "webrx",
+    "sdr",
+    "amateur-radio",
+    "openstreetmap"
+  ],
   "author": "",
   "license": "MIT",
   "description": "Amateur Radio Web Receiver Map & Directory Application",
   "dependencies": {
     "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
     "node-fetch": "^2.7.0"
   }
 }
