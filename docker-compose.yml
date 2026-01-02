@@ -1,0 +1,22 @@
+services:
+  webrx:
+    build: .
+    container_name: webrx
+    ports:
+      - "${PORT:-3300}:3300"
+    environment:
+      - NODE_ENV=production
+      - PORT=3300
+    volumes:
+      - ./public/locations.json:/app/public/locations.json:ro
+      - webrx-cache:/app/public/grabber
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3300"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  webrx-cache:

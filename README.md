@@ -35,6 +35,30 @@ npm start
 
 The server will start on `http://localhost:3300` (or the port specified in the `PORT` environment variable).
 
+## Docker
+
+### Using Docker Compose (Recommended)
+```bash
+docker compose up -d
+```
+
+### Using Docker directly
+```bash
+# Build the image
+docker build -t webrx .
+
+# Run the container
+docker run -d -p 3300:3300 --name webrx webrx
+```
+
+### Environment Variables
+- `PORT` - Server port (default: 3300)
+- `NODE_ENV` - Environment mode (default: production)
+
+### Volumes
+- `./public/locations.json` - Station configuration (read-only mount)
+- `webrx-cache` - SDR status cache data
+
 ## API Endpoints
 
 - `GET /api/sdrs` - Get status of all SDR stations (cached for 10 minutes)
