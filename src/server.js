@@ -2,9 +2,30 @@ const express = require('express');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const PORT = process.env.PORT || 3300;
+
+// Security headers
+app.use(helmet({
+  contentSecurityPolicy: false, // Disabled for inline scripts
+  crossOriginEmbedderPolicy: false
+}));
+
+// Rate limiting
+const apiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 60, // 60 requests per minute
+  message: { error: 'Too many requests, please try again later' }
+});
+
+const tileLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 300, // 300 tile requests per minute
+  message: 'Too many tile requests'
+});
 
 // In-memory cache for SDR status
 let sdrCache = {
@@ -19,7 +40,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 // ============================================
 // SDR Status Checker API (replaces sdrs.php)
 // ============================================
-app.get('/api/sdrs', async (req, res) => {
+app.get('/api/sdrs', apiLimiter, async (req, res) => {
   try {
     // Check if cache is still valid
     if (sdrCache.last_checked) {
@@ -98,10 +119,25 @@ app.get('/api/sdrs', async (req, res) => {
 // ============================================
 const tileCache = new Map();
 const TILE_CACHE_TTL = 86400000; // 24 hours in milliseconds
+const VALID_SUBDOMAINS = ['a', 'b', 'c'];
 
-app.get('/tiles/:s/:z/:x/:y.png', async (req, res) => {
+app.get('/tiles/:s/:z/:x/:y.png', tileLimiter, async (req, res) => {
   const { s, z, x, y } = req.params;
-  const cacheKey = `${s}/${z}/${x}/${y}`;
+
+  // Validate subdomain
+  if (!VALID_SUBDOMAINS.includes(s)) {
+    return res.status(400).send('Invalid subdomain');
+  }
+
+  // Validate coordinates are integers
+  const zInt = parseInt(z, 10);
+  const xInt = parseInt(x, 10);
+  const yInt = parseInt(y, 10);
+  if (isNaN(zInt) || isNaN(xInt) || isNaN(yInt) || zInt < 0 || zInt > 19) {
+    return res.status(400).send('Invalid tile coordinates');
+  }
+
+  const cacheKey = `${s}/${zInt}/${xInt}/${yInt}`;
 
   // Check memory cache
   const cached = tileCache.get(cacheKey);
@@ -113,7 +149,7 @@ app.get('/tiles/:s/:z/:x/:y.png', async (req, res) => {
 
   try {
     // Fetch from OpenStreetMap tile servers
-    const tileUrl = `https://${s}.tile.openstreetmap.org/${z}/${x}/${y}.png`;
+    const tileUrl = `https://${s}.tile.openstreetmap.org/${zInt}/${xInt}/${yInt}.png`;
     const response = await fetch(tileUrl, {
       headers: {
         'User-Agent': 'WebRX Amateur Radio Map/1.0'
