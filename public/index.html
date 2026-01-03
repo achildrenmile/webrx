@@ -123,21 +123,16 @@
 
     /* Maidenhead Grid Labels */
     .grid-label {
-      background: rgba(59, 130, 246, 0.9);
-      color: white;
+      background: rgba(234, 179, 8, 0.85);
+      color: #1e1e1e;
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
       white-space: nowrap;
       pointer-events: none;
-    }
-
-    .grid-label-field {
-      background: rgba(59, 130, 246, 0.95);
-      font-size: 14px;
-      padding: 4px 8px;
+      text-shadow: 0 0 2px rgba(255,255,255,0.3);
     }
 
     /* Leaflet Layer Control Styling */
@@ -637,61 +632,73 @@
       return getFieldName(lonField, latField) + lonSquare + latSquare;
     }
 
-    // Create Maidenhead grid overlay layer for Austria region
-    function createGridLayer() {
+    // Create Maidenhead grid overlay layer - covers full world, updates on zoom/pan
+    function createGridLayer(map) {
       const gridLayer = L.layerGroup();
 
-      // Grid line styles
-      const fieldLineStyle = { color: '#3b82f6', weight: 3, opacity: 0.9 };
-      const squareLineStyle = { color: '#60a5fa', weight: 1.5, opacity: 0.7 };
+      // Grid line styles - warm yellow/orange color that fits dark theme
+      const gridLineStyle = { color: '#eab308', weight: 1.5, opacity: 0.6 };
 
-      // Austria region bounds (with padding)
-      const minLat = 45;
-      const maxLat = 50;
-      const minLng = 8;
-      const maxLng = 18;
+      function updateGrid() {
+        gridLayer.clearLayers();
 
-      // For Austria, we're in fields IN, JN, KN (lon fields 9, 9, 10 and lat fields 4, 5, 6)
-      // Field J = longitude 0-20° (index 9), K = 20-40° (index 10)
-      // Field N = latitude 40-50° (index 13)
+        const bounds = map.getBounds();
+        const zoom = map.getZoom();
 
-      // Draw vertical lines (longitude) - every 2° for squares
-      for (let lng = minLng; lng <= maxLng; lng += 2) {
-        const isFieldBoundary = (lng % 20 === 0);
-        const style = isFieldBoundary ? fieldLineStyle : squareLineStyle;
-        L.polyline([[minLat, lng], [maxLat, lng]], style).addTo(gridLayer);
-      }
+        // Expand bounds to ensure full coverage
+        const minLat = Math.floor(bounds.getSouth()) - 1;
+        const maxLat = Math.ceil(bounds.getNorth()) + 1;
+        const minLng = Math.floor(bounds.getWest()) - 2;
+        const maxLng = Math.ceil(bounds.getEast()) + 2;
 
-      // Draw horizontal lines (latitude) - every 1° for squares
-      for (let lat = minLat; lat <= maxLat; lat += 1) {
-        const isFieldBoundary = (lat % 10 === 0);
-        const style = isFieldBoundary ? fieldLineStyle : squareLineStyle;
-        L.polyline([[lat, minLng], [lat, maxLng]], style).addTo(gridLayer);
-      }
+        // Align to 2° longitude grid
+        const startLng = Math.floor(minLng / 2) * 2;
+        const endLng = Math.ceil(maxLng / 2) * 2;
 
-      // Add square labels (4-char: e.g., JN66, JN67)
-      for (let lng = minLng; lng < maxLng; lng += 2) {
-        for (let lat = minLat; lat < maxLat; lat += 1) {
-          const centerLat = lat + 0.5;
-          const centerLng = lng + 1;
+        // Draw vertical lines (longitude) - every 2°
+        for (let lng = startLng; lng <= endLng; lng += 2) {
+          L.polyline([[minLat, lng], [maxLat, lng]], gridLineStyle).addTo(gridLayer);
+        }
 
-          // Calculate maidenhead square name
-          const lonField = Math.floor((lng + 180) / 20);
-          const latField = Math.floor((lat + 90) / 10);
-          const lonSquare = Math.floor(((lng + 180) % 20) / 2);
-          const latSquare = Math.floor((lat + 90) % 10);
+        // Draw horizontal lines (latitude) - every 1°
+        for (let lat = minLat; lat <= maxLat; lat += 1) {
+          L.polyline([[lat, startLng], [lat, endLng]], gridLineStyle).addTo(gridLayer);
+        }
 
-          const squareName = getSquareName(lonField, latField, lonSquare, latSquare);
+        // Add square labels (4-char: e.g., JN66, JN67)
+        // Only show labels if zoom level is reasonable
+        if (zoom >= 5) {
+          for (let lng = startLng; lng < endLng; lng += 2) {
+            for (let lat = minLat; lat < maxLat; lat += 1) {
+              const centerLat = lat + 0.5;
+              const centerLng = lng + 1;
 
-          const squareLabel = L.divIcon({
-            html: `<div class="grid-label">${squareName}</div>`,
-            className: '',
-            iconSize: [44, 18],
-            iconAnchor: [22, 9]
-          });
-          L.marker([centerLat, centerLng], { icon: squareLabel, interactive: false }).addTo(gridLayer);
+              // Calculate maidenhead square name
+              const lonField = Math.floor((lng + 180) / 20);
+              const latField = Math.floor((lat + 90) / 10);
+              const lonSquare = Math.floor(((lng + 180) % 20) / 2);
+              const latSquare = Math.floor((lat + 90) % 10);
+
+              const squareName = getSquareName(lonField, latField, lonSquare, latSquare);
+
+              const squareLabel = L.divIcon({
+                html: `<div class="grid-label">${squareName}</div>`,
+                className: '',
+                iconSize: [44, 18],
+                iconAnchor: [22, 9]
+              });
+              L.marker([centerLat, centerLng], { icon: squareLabel, interactive: false }).addTo(gridLayer);
+            }
+          }
         }
       }
+
+      // Update grid on map events
+      map.on('moveend', updateGrid);
+      map.on('zoomend', updateGrid);
+
+      // Initial draw
+      updateGrid();
 
       return gridLayer;
     }
@@ -708,7 +715,7 @@
       }).addTo(map);
 
       // Create grid layer
-      const gridLayer = createGridLayer();
+      const gridLayer = createGridLayer(map);
 
       // Check if grid should be shown from localStorage
       const showGrid = localStorage.getItem('showMaidenheadGrid') === 'true';
