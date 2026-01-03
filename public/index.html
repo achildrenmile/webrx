@@ -121,6 +121,64 @@
     .stat-dot.issues { background: var(--warning); }
     .stat-dot.offline { background: var(--danger); }
 
+    /* Grid Square Toggle Button */
+    .grid-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+
+    .grid-toggle:hover {
+      background: var(--bg-dark);
+      border-color: var(--primary);
+    }
+
+    .grid-toggle.active {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .grid-toggle svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .grid-toggle-label {
+      font-weight: 500;
+    }
+
+    /* Grid Square Display in Popup */
+    .popup-gridsquare {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+
+    .popup-gridsquare svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0.7;
+    }
+
+    .popup-gridsquare-code {
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      font-weight: 600;
+      color: var(--primary);
+      letter-spacing: 0.05em;
+    }
+
     /* Main Map Container */
     main {
       flex: 1;
@@ -453,6 +511,14 @@
         display: none;
       }
 
+      .grid-toggle-label {
+        display: none;
+      }
+
+      .grid-toggle {
+        padding: 6px 8px;
+      }
+
       .leaflet-popup-content {
         min-width: 260px;
         max-width: 280px;
@@ -514,6 +580,10 @@
         <span class="brand-tagline">Amateur Radio Receivers</span>
       </div>
     </div>
+    <button class="grid-toggle" id="gridToggle" title="Toggle Grid Square Display">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <span class="grid-toggle-label">Grid</span>
+    </button>
     <div class="header-stats" id="headerStats">
       <div class="stat">
         <span class="stat-dot online"></span>
@@ -549,11 +619,58 @@
   <script>
     const radioIcon = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 5c-3.87 0-7 3.13-7 7h2c0-2.76 2.24-5 5-5s5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4C5.93 1 1 5.93 1 12h2c0-4.97 4.03-9 9-9s9 4.03 9 9h2c0-6.07-4.93-11-11-11zm0 8c-1.66 0-3 1.34-3 3 0 1.31.84 2.41 2 2.83V22h2v-7.17c1.16-.42 2-1.52 2-2.83 0-1.66-1.34-3-3-3z"/></svg>`;
 
+    const gridIcon = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`;
+
+    // Maidenhead Grid Square calculation
+    function latLngToMaidenhead(lat, lng) {
+      const upper = 'ABCDEFGHIJKLMNOPQRSTUVWX';
+      const lower = 'abcdefghijklmnopqrstuvwx';
+
+      // Normalize longitude (-180 to 180 -> 0 to 360)
+      let lon = lng + 180;
+      // Normalize latitude (-90 to 90 -> 0 to 180)
+      let la = lat + 90;
+
+      // Field (2 chars: A-R)
+      const field1 = upper.charAt(Math.floor(lon / 20));
+      const field2 = upper.charAt(Math.floor(la / 10));
+
+      // Square (2 chars: 0-9)
+      const square1 = Math.floor((lon % 20) / 2);
+      const square2 = Math.floor(la % 10);
+
+      // Subsquare (2 chars: a-x)
+      const subsq1 = lower.charAt(Math.floor((lon % 2) * 12));
+      const subsq2 = lower.charAt(Math.floor((la % 1) * 24));
+
+      return field1 + field2 + square1 + square2 + subsq1 + subsq2;
+    }
+
+    // Grid square display state
+    let showGridSquare = localStorage.getItem('showGridSquare') === 'true';
+
+    function updateGridToggle() {
+      const toggle = document.getElementById('gridToggle');
+      if (showGridSquare) {
+        toggle.classList.add('active');
+      } else {
+        toggle.classList.remove('active');
+      }
+    }
+
+    function toggleGridSquare() {
+      showGridSquare = !showGridSquare;
+      localStorage.setItem('showGridSquare', showGridSquare);
+      updateGridToggle();
+    }
+
     function initMap(locations) {
       const map = L.map('map', {
         zoomControl: true,
         attributionControl: false
       }).setView([47.6, 14.2], 7);
+
+      currentMap = map;
 
       L.tileLayer('/tiles/{s}/{z}/{x}/{y}.png', {
         subdomains: ['a', 'b', 'c']
@@ -610,6 +727,14 @@
           </div>
         ` : '';
 
+        const gridSquare = latLngToMaidenhead(location.lat, location.lng);
+        const gridSection = showGridSquare ? `
+          <div class="popup-gridsquare popup-meta-item">
+            ${gridIcon}
+            <span class="popup-gridsquare-code">${gridSquare}</span>
+          </div>
+        ` : '';
+
         const popupContent = `
           <div class="popup-card">
             <div class="popup-header">
@@ -621,6 +746,7 @@
             </div>
             <div class="popup-meta">
               ${pingSection}
+              ${gridSection}
             </div>
             ${frequencySection}
             ${location.info ? `<div class="popup-info">${location.info}</div>` : ''}
@@ -662,7 +788,23 @@
         });
     }
 
+    let currentMap = null;
+    let cachedLocations = null;
+
     document.addEventListener('DOMContentLoaded', async function() {
+      // Initialize grid toggle state
+      updateGridToggle();
+
+      // Add grid toggle event listener
+      document.getElementById('gridToggle').addEventListener('click', function() {
+        toggleGridSquare();
+        // Reinitialize map to update popup content
+        if (currentMap && cachedLocations) {
+          currentMap.remove();
+          initMap(cachedLocations);
+        }
+      });
+
       const [sdrData, locations] = await Promise.all([fetchSdrData(), fetchLocations()]);
 
       if (sdrData && locations) {
@@ -676,6 +818,7 @@
           };
         });
 
+        cachedLocations = locationsWithStatus;
         initMap(locationsWithStatus);
       } else {
         document.getElementById('loadingOverlay').classList.add('hidden');
