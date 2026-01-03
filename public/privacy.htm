@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <title>Imprint & Privacy Policy - WebRX Austria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--primary-hover);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: var(--bg-dark);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      height: 40px;
+      width: auto;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .brand-tagline {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--primary);
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 32px 0;
+      color: var(--text-primary);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 40px 0 20px 0;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    h2:first-of-type {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 24px 0 12px 0;
+      color: var(--text-primary);
+    }
+
+    p {
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin: 0 0 16px 0;
+    }
+
+    ul {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      padding-left: 24px;
+      margin: 0 0 16px 0;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .info-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .info-box p {
+      margin: 8px 0;
+    }
+
+    .info-box p:first-child {
+      margin-top: 0;
+    }
+
+    .info-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    footer {
+      background: var(--bg-dark);
+      border-top: 1px solid var(--border);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .lang-switch {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .lang-switch:hover {
+      color: var(--text-primary);
+      border-color: var(--primary);
+    }
+
+    @media (max-width: 640px) {
+      header {
+        padding: 10px 16px;
+      }
+
+      .logo {
+        height: 32px;
+      }
+
+      .brand-name {
+        font-size: 1rem;
+      }
+
+      .brand-tagline {
+        display: none;
+      }
+
+      main {
+        padding: 24px 16px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <a href="/" class="logo-container">
+      <img src="images/webrxAT.png" alt="WebRX Austria" class="logo">
+      <div class="brand">
+        <span class="brand-name">WebRX Austria</span>
+        <span class="brand-tagline">Amateur Radio Receivers</span>
+      </div>
+    </a>
+    <a href="/imprint.htm" class="lang-switch">Deutsch</a>
+  </header>
+
+  <main>
+    <a href="/" class="back-link">&larr; Back to Map</a>
+
+    <h1>Imprint & Privacy Policy</h1>
+
+    <h2>Imprint</h2>
+
+    <p><strong>Information and Disclosure according to §5 (1) ECG, §25 MedienG, §63 GewO and §14 UGB (Austrian Law)</strong></p>
+
+    <div class="info-box">
+      <p><strong>Website Operator:</strong> Ing. Michael Linder, MSc. | OE8YML</p>
+      <p><strong>Address:</strong> Nötsch 219, 9611 Nötsch im Gailtal, Austria</p>
+      <p><strong>Email:</strong> <a href="mailto:oe8yml@rednil.at">oe8yml@rednil.at</a></p>
+    </div>
+
+    <h3>Applicable Legal Regulations</h3>
+    <p>Trade Regulations: <a href="https://www.ris.bka.gv.at" target="_blank" rel="noopener">www.ris.bka.gv.at</a></p>
+
+    <h3>Online Dispute Resolution</h3>
+    <p>Consumers residing in Austria or any other contracting state of the ODR Regulation have the option to resolve disputes regarding paid purchases of goods or services through online dispute resolution (OS, AStG). The European Commission provides a platform for this purpose: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr</a></p>
+
+    <h3>Copyright</h3>
+    <p>The contents of this website are subject to various protective rights (e.g. copyright) where legally possible. Any use/distribution of provided material that is prohibited by copyright requires written consent from the website operator.</p>
+
+    <h3>Disclaimer</h3>
+    <p>Despite careful content control, the website operator assumes no liability for the content of external links. The operators of linked pages are solely responsible for their content. If you become aware of outgoing links that refer to a website with illegal activity/information, please notify us so that we can remove them immediately according to §17 Para. 2 ECG.</p>
+    <p>Third-party copyrights are observed with the greatest care by the operator of this website. If you nevertheless become aware of a copyright infringement, please notify us accordingly. Upon becoming aware of such legal violations, we will remove the affected content immediately.</p>
+
+    <h2>Privacy Policy</h2>
+
+    <h3>Data Controller</h3>
+    <p>Responsible for data processing on this website:</p>
+    <div class="info-box">
+      <p><strong>Ing. Michael Linder, MSc. | OE8YML</strong></p>
+      <p>Nötsch 219, 9611 Nötsch im Gailtal, Austria</p>
+      <p>Email: <a href="mailto:oe8yml@rednil.at">oe8yml@rednil.at</a></p>
+    </div>
+
+    <h3>Data Collected</h3>
+    <p>When visiting this website, the following data is automatically collected:</p>
+    <ul>
+      <li>IP address (anonymized)</li>
+      <li>Date and time of access</li>
+      <li>Browser type and version</li>
+      <li>Operating system used</li>
+      <li>Referrer URL (previously visited page)</li>
+    </ul>
+    <p>This data is used exclusively to ensure trouble-free operation of the website and to improve our offering. It is not possible to identify a specific person.</p>
+
+    <h3>Legal Basis</h3>
+    <p>Processing is carried out on the basis of Art. 6(1)(f) GDPR (legitimate interest). Our legitimate interest lies in providing and improving this website.</p>
+
+    <h3>Cookies</h3>
+    <p>This website does not use tracking cookies. No cookies are used for advertising purposes or to analyze user behavior.</p>
+
+    <h3>Cloudflare</h3>
+    <p>This website uses "Cloudflare Tunnel", a service provided by Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, USA.</p>
+    <p>Cloudflare acts as a data processor within the meaning of Article 28 GDPR and processes personal data solely on behalf of and in accordance with the instructions of the website operator. The processed data includes, in particular, IP addresses, technical connection data, HTTP request metadata, and security and log data.</p>
+    <p>The processing is carried out for the purpose of ensuring the secure, stable, and efficient operation of this website, in particular for protection against attacks, abuse prevention, and maintaining service availability.</p>
+    <p>The legal basis for the processing is Article 6(1)(f) GDPR (legitimate interest in ensuring security, stability, and protection against misuse).</p>
+    <p>Cloudflare may process personal data in third countries, in particular the United States. To ensure an adequate level of data protection, Cloudflare has implemented appropriate safeguards pursuant to Article 46 GDPR, including the use of EU Standard Contractual Clauses (SCCs). Where applicable, Cloudflare may also rely on the EU-US Data Privacy Framework.</p>
+    <p>A Data Processing Addendum (DPA) in accordance with Article 28 GDPR has been concluded with Cloudflare, governing the processing of personal data in compliance with data protection law.</p>
+    <p>Further information on data processing by Cloudflare can be found at:<br>
+    <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">https://www.cloudflare.com/privacypolicy/</a><br>
+    <a href="https://www.cloudflare.com/cloudflare-customer-dpa/" target="_blank" rel="noopener">https://www.cloudflare.com/cloudflare-customer-dpa/</a></p>
+
+    <h3>Other External Services</h3>
+    <p><strong>OpenStreetMap:</strong> For map display, we use OpenStreetMap tiles via our own proxy server. No data is transmitted directly to OpenStreetMap.</p>
+    <p><strong>Google Fonts:</strong> This website uses Google Fonts for font display. This may establish a connection to Google servers. For more information, see the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</p>
+
+    <h3>External WebRX Stations</h3>
+    <p>This website displays links to external WebRX receiver stations. When you visit an external station, the privacy policies of the respective operator apply.</p>
+
+    <h3>Your Rights</h3>
+    <p>You have the following rights under GDPR:</p>
+    <ul>
+      <li><strong>Right of access (Art. 15):</strong> You can request information about your processed data.</li>
+      <li><strong>Right to rectification (Art. 16):</strong> You can request correction of inaccurate data.</li>
+      <li><strong>Right to erasure (Art. 17):</strong> You can request deletion of your data.</li>
+      <li><strong>Right to restriction of processing (Art. 18):</strong> You can request restriction of processing.</li>
+      <li><strong>Right to data portability (Art. 20):</strong> You can receive your data in a common format.</li>
+      <li><strong>Right to object (Art. 21):</strong> You can object to the processing of your data.</li>
+    </ul>
+    <p>To exercise your rights, please contact the email address listed above.</p>
+
+    <h3>Right to Lodge a Complaint</h3>
+    <p>You have the right to lodge a complaint with the Austrian Data Protection Authority:</p>
+    <div class="info-box">
+      <p><strong>Austrian Data Protection Authority</strong></p>
+      <p>Barichgasse 40-42, 1030 Vienna, Austria</p>
+      <p>Phone: +43 1 52 152-0</p>
+      <p>Email: <a href="mailto:dsb@dsb.gv.at">dsb@dsb.gv.at</a></p>
+      <p>Website: <a href="https://www.dsb.gv.at" target="_blank" rel="noopener">www.dsb.gv.at</a></p>
+    </div>
+
+    <h3>Last Updated</h3>
+    <p>This privacy policy was last updated: January 2026</p>
+  </main>
+
+  <footer>
+    <p class="footer-text">&copy; 2026 WebRX Austria. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>
