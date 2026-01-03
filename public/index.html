@@ -121,62 +121,61 @@
     .stat-dot.issues { background: var(--warning); }
     .stat-dot.offline { background: var(--danger); }
 
-    /* Grid Square Toggle Button */
-    .grid-toggle {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 12px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-size: 0.8125rem;
-      color: var(--text-secondary);
-    }
-
-    .grid-toggle:hover {
-      background: var(--bg-dark);
-      border-color: var(--primary);
-    }
-
-    .grid-toggle.active {
-      background: rgba(59, 130, 246, 0.15);
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    .grid-toggle svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
-
-    .grid-toggle-label {
-      font-weight: 500;
-    }
-
-    /* Grid Square Display in Popup */
-    .popup-gridsquare {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.8125rem;
-      color: var(--text-secondary);
-    }
-
-    .popup-gridsquare svg {
-      width: 14px;
-      height: 14px;
-      opacity: 0.7;
-    }
-
-    .popup-gridsquare-code {
-      font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+    /* Maidenhead Grid Labels */
+    .grid-label {
+      background: rgba(59, 130, 246, 0.9);
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
       font-weight: 600;
-      color: var(--primary);
-      letter-spacing: 0.05em;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .grid-label-field {
+      background: rgba(59, 130, 246, 0.95);
+      font-size: 14px;
+      padding: 4px 8px;
+    }
+
+    /* Leaflet Layer Control Styling */
+    .leaflet-control-layers {
+      border: none !important;
+      box-shadow: var(--shadow-lg) !important;
+      border-radius: var(--radius) !important;
+    }
+
+    .leaflet-control-layers-expanded {
+      background: var(--bg-card) !important;
+      color: var(--text-primary) !important;
+      padding: 8px 12px !important;
+    }
+
+    .leaflet-control-layers-toggle {
+      background-color: var(--bg-card) !important;
+      border: 1px solid var(--border) !important;
+      width: 36px !important;
+      height: 36px !important;
+      border-radius: var(--radius) !important;
+    }
+
+    .leaflet-control-layers-separator {
+      border-top-color: var(--border) !important;
+    }
+
+    .leaflet-control-layers label {
+      color: var(--text-primary) !important;
+      margin-bottom: 4px;
+    }
+
+    .leaflet-control-layers-overlays label {
+      cursor: pointer;
+    }
+
+    .leaflet-control-layers-overlays label:hover {
+      color: var(--primary) !important;
     }
 
     /* Main Map Container */
@@ -511,14 +510,6 @@
         display: none;
       }
 
-      .grid-toggle-label {
-        display: none;
-      }
-
-      .grid-toggle {
-        padding: 6px 8px;
-      }
-
       .leaflet-popup-content {
         min-width: 260px;
         max-width: 280px;
@@ -580,10 +571,6 @@
         <span class="brand-tagline">Amateur Radio Receivers</span>
       </div>
     </div>
-    <button class="grid-toggle" id="gridToggle" title="Toggle Grid Square Display">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-      <span class="grid-toggle-label">Grid</span>
-    </button>
     <div class="header-stats" id="headerStats">
       <div class="stat">
         <span class="stat-dot online"></span>
@@ -619,49 +606,113 @@
   <script>
     const radioIcon = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 5c-3.87 0-7 3.13-7 7h2c0-2.76 2.24-5 5-5s5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4C5.93 1 1 5.93 1 12h2c0-4.97 4.03-9 9-9s9 4.03 9 9h2c0-6.07-4.93-11-11-11zm0 8c-1.66 0-3 1.34-3 3 0 1.31.84 2.41 2 2.83V22h2v-7.17c1.16-.42 2-1.52 2-2.83 0-1.66-1.34-3-3-3z"/></svg>`;
 
-    const gridIcon = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`;
-
     // Maidenhead Grid Square calculation
-    function latLngToMaidenhead(lat, lng) {
-      const upper = 'ABCDEFGHIJKLMNOPQRSTUVWX';
-      const lower = 'abcdefghijklmnopqrstuvwx';
-
-      // Normalize longitude (-180 to 180 -> 0 to 360)
-      let lon = lng + 180;
-      // Normalize latitude (-90 to 90 -> 0 to 180)
-      let la = lat + 90;
-
-      // Field (2 chars: A-R)
-      const field1 = upper.charAt(Math.floor(lon / 20));
-      const field2 = upper.charAt(Math.floor(la / 10));
-
-      // Square (2 chars: 0-9)
-      const square1 = Math.floor((lon % 20) / 2);
-      const square2 = Math.floor(la % 10);
-
-      // Subsquare (2 chars: a-x)
-      const subsq1 = lower.charAt(Math.floor((lon % 2) * 12));
-      const subsq2 = lower.charAt(Math.floor((la % 1) * 24));
-
-      return field1 + field2 + square1 + square2 + subsq1 + subsq2;
+    function getFieldName(lonField, latField) {
+      const upper = 'ABCDEFGHIJKLMNOPQR';
+      return upper.charAt(lonField) + upper.charAt(latField);
     }
 
-    // Grid square display state
-    let showGridSquare = localStorage.getItem('showGridSquare') === 'true';
+    function getSquareName(lonField, latField, lonSquare, latSquare) {
+      return getFieldName(lonField, latField) + lonSquare + latSquare;
+    }
 
-    function updateGridToggle() {
-      const toggle = document.getElementById('gridToggle');
-      if (showGridSquare) {
-        toggle.classList.add('active');
-      } else {
-        toggle.classList.remove('active');
+    // Create Maidenhead grid overlay layer
+    function createGridLayer(map) {
+      const gridLayer = L.layerGroup();
+
+      // Grid line styles
+      const fieldLineStyle = { color: '#3b82f6', weight: 2, opacity: 0.8 };
+      const squareLineStyle = { color: '#3b82f6', weight: 1, opacity: 0.5, dashArray: '5, 5' };
+
+      // Get map bounds with some padding for Austria region
+      const bounds = map.getBounds();
+      const minLat = Math.floor(bounds.getSouth());
+      const maxLat = Math.ceil(bounds.getNorth());
+      const minLng = Math.floor(bounds.getWest());
+      const maxLng = Math.ceil(bounds.getEast());
+
+      // Draw Field boundaries (20° lon x 10° lat) and labels
+      // Fields: longitude starts at -180, so field 0 = -180 to -160, field 9 (J) = 0 to 20
+      for (let lonField = 0; lonField < 18; lonField++) {
+        const fieldLonStart = -180 + (lonField * 20);
+        const fieldLonEnd = fieldLonStart + 20;
+
+        if (fieldLonEnd < minLng - 20 || fieldLonStart > maxLng + 20) continue;
+
+        for (let latField = 0; latField < 18; latField++) {
+          const fieldLatStart = -90 + (latField * 10);
+          const fieldLatEnd = fieldLatStart + 10;
+
+          if (fieldLatEnd < minLat - 10 || fieldLatStart > maxLat + 10) continue;
+
+          const fieldName = getFieldName(lonField, latField);
+
+          // Draw field boundary lines
+          // Left edge
+          if (fieldLonStart >= minLng - 5 && fieldLonStart <= maxLng + 5) {
+            L.polyline([[fieldLatStart, fieldLonStart], [fieldLatEnd, fieldLonStart]], fieldLineStyle).addTo(gridLayer);
+          }
+          // Bottom edge
+          if (fieldLatStart >= minLat - 5 && fieldLatStart <= maxLat + 5) {
+            L.polyline([[fieldLatStart, fieldLonStart], [fieldLatStart, fieldLonEnd]], fieldLineStyle).addTo(gridLayer);
+          }
+
+          // Add field label at center
+          const fieldCenterLat = fieldLatStart + 5;
+          const fieldCenterLon = fieldLonStart + 10;
+          if (fieldCenterLat >= minLat && fieldCenterLat <= maxLat &&
+              fieldCenterLon >= minLng && fieldCenterLon <= maxLng) {
+            const fieldLabel = L.divIcon({
+              html: `<div class="grid-label grid-label-field">${fieldName}</div>`,
+              className: '',
+              iconSize: [40, 20],
+              iconAnchor: [20, 10]
+            });
+            L.marker([fieldCenterLat, fieldCenterLon], { icon: fieldLabel, interactive: false }).addTo(gridLayer);
+          }
+
+          // Draw Squares within this field (2° lon x 1° lat)
+          for (let lonSq = 0; lonSq < 10; lonSq++) {
+            const sqLonStart = fieldLonStart + (lonSq * 2);
+            const sqLonEnd = sqLonStart + 2;
+
+            if (sqLonEnd < minLng - 2 || sqLonStart > maxLng + 2) continue;
+
+            for (let latSq = 0; latSq < 10; latSq++) {
+              const sqLatStart = fieldLatStart + latSq;
+              const sqLatEnd = sqLatStart + 1;
+
+              if (sqLatEnd < minLat - 1 || sqLatStart > maxLat + 1) continue;
+
+              const squareName = getSquareName(lonField, latField, lonSq, latSq);
+
+              // Draw square boundary lines (skip if on field boundary)
+              if (lonSq > 0 && sqLonStart >= minLng && sqLonStart <= maxLng) {
+                L.polyline([[sqLatStart, sqLonStart], [sqLatEnd, sqLonStart]], squareLineStyle).addTo(gridLayer);
+              }
+              if (latSq > 0 && sqLatStart >= minLat && sqLatStart <= maxLat) {
+                L.polyline([[sqLatStart, sqLonStart], [sqLatStart, sqLonEnd]], squareLineStyle).addTo(gridLayer);
+              }
+
+              // Add square label at center
+              const sqCenterLat = sqLatStart + 0.5;
+              const sqCenterLon = sqLonStart + 1;
+              if (sqCenterLat >= minLat && sqCenterLat <= maxLat &&
+                  sqCenterLon >= minLng && sqCenterLon <= maxLng) {
+                const squareLabel = L.divIcon({
+                  html: `<div class="grid-label">${squareName}</div>`,
+                  className: '',
+                  iconSize: [36, 16],
+                  iconAnchor: [18, 8]
+                });
+                L.marker([sqCenterLat, sqCenterLon], { icon: squareLabel, interactive: false }).addTo(gridLayer);
+              }
+            }
+          }
+        }
       }
-    }
 
-    function toggleGridSquare() {
-      showGridSquare = !showGridSquare;
-      localStorage.setItem('showGridSquare', showGridSquare);
-      updateGridToggle();
+      return gridLayer;
     }
 
     function initMap(locations) {
@@ -670,11 +721,37 @@
         attributionControl: false
       }).setView([47.6, 14.2], 7);
 
-      currentMap = map;
-
-      L.tileLayer('/tiles/{s}/{z}/{x}/{y}.png', {
+      // Base tile layer
+      const tileLayer = L.tileLayer('/tiles/{s}/{z}/{x}/{y}.png', {
         subdomains: ['a', 'b', 'c']
       }).addTo(map);
+
+      // Create grid layer
+      const gridLayer = createGridLayer(map);
+
+      // Check if grid should be shown from localStorage
+      const showGrid = localStorage.getItem('showMaidenheadGrid') === 'true';
+      if (showGrid) {
+        gridLayer.addTo(map);
+      }
+
+      // Add layer control
+      const overlays = {
+        'Maidenhead Grid': gridLayer
+      };
+      L.control.layers(null, overlays, { position: 'topright' }).addTo(map);
+
+      // Save preference when layer is toggled
+      map.on('overlayadd', function(e) {
+        if (e.name === 'Maidenhead Grid') {
+          localStorage.setItem('showMaidenheadGrid', 'true');
+        }
+      });
+      map.on('overlayremove', function(e) {
+        if (e.name === 'Maidenhead Grid') {
+          localStorage.setItem('showMaidenheadGrid', 'false');
+        }
+      });
 
       // Update header stats
       const online = locations.filter(l => l.status === 2).length;
@@ -727,14 +804,6 @@
           </div>
         ` : '';
 
-        const gridSquare = latLngToMaidenhead(location.lat, location.lng);
-        const gridSection = showGridSquare ? `
-          <div class="popup-gridsquare popup-meta-item">
-            ${gridIcon}
-            <span class="popup-gridsquare-code">${gridSquare}</span>
-          </div>
-        ` : '';
-
         const popupContent = `
           <div class="popup-card">
             <div class="popup-header">
@@ -746,7 +815,6 @@
             </div>
             <div class="popup-meta">
               ${pingSection}
-              ${gridSection}
             </div>
             ${frequencySection}
             ${location.info ? `<div class="popup-info">${location.info}</div>` : ''}
@@ -788,23 +856,7 @@
         });
     }
 
-    let currentMap = null;
-    let cachedLocations = null;
-
     document.addEventListener('DOMContentLoaded', async function() {
-      // Initialize grid toggle state
-      updateGridToggle();
-
-      // Add grid toggle event listener
-      document.getElementById('gridToggle').addEventListener('click', function() {
-        toggleGridSquare();
-        // Reinitialize map to update popup content
-        if (currentMap && cachedLocations) {
-          currentMap.remove();
-          initMap(cachedLocations);
-        }
-      });
-
       const [sdrData, locations] = await Promise.all([fetchSdrData(), fetchLocations()]);
 
       if (sdrData && locations) {
@@ -818,7 +870,6 @@
           };
         });
 
-        cachedLocations = locationsWithStatus;
         initMap(locationsWithStatus);
       } else {
         document.getElementById('loadingOverlay').classList.add('hidden');
