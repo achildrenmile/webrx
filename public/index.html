@@ -145,29 +145,44 @@
       border: none !important;
       box-shadow: var(--shadow-lg) !important;
       border-radius: var(--radius) !important;
-    }
-
-    .leaflet-control-layers-expanded {
-      background: var(--bg-card) !important;
-      color: var(--text-primary) !important;
-      padding: 8px 12px !important;
+      overflow: hidden;
     }
 
     .leaflet-control-layers-toggle {
       background-color: var(--bg-card) !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f8fafc'%3E%3Cpath d='M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z'/%3E%3C/svg%3E") !important;
+      background-size: 20px 20px !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
       border: 1px solid var(--border) !important;
       width: 36px !important;
       height: 36px !important;
       border-radius: var(--radius) !important;
     }
 
+    .leaflet-control-layers-toggle:hover {
+      background-color: var(--bg-dark) !important;
+    }
+
+    .leaflet-control-layers-expanded {
+      background: var(--bg-card) !important;
+      color: var(--text-primary) !important;
+      padding: 10px 14px !important;
+      border: 1px solid var(--border) !important;
+    }
+
     .leaflet-control-layers-separator {
       border-top-color: var(--border) !important;
+      margin: 6px 0 !important;
     }
 
     .leaflet-control-layers label {
       color: var(--text-primary) !important;
-      margin-bottom: 4px;
+      margin-bottom: 6px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      font-size: 0.875rem !important;
     }
 
     .leaflet-control-layers-overlays label {
@@ -176,6 +191,12 @@
 
     .leaflet-control-layers-overlays label:hover {
       color: var(--primary) !important;
+    }
+
+    .leaflet-control-layers input[type="checkbox"] {
+      width: 16px !important;
+      height: 16px !important;
+      accent-color: var(--primary) !important;
     }
 
     /* Main Map Container */
@@ -616,99 +637,59 @@
       return getFieldName(lonField, latField) + lonSquare + latSquare;
     }
 
-    // Create Maidenhead grid overlay layer
-    function createGridLayer(map) {
+    // Create Maidenhead grid overlay layer for Austria region
+    function createGridLayer() {
       const gridLayer = L.layerGroup();
 
       // Grid line styles
-      const fieldLineStyle = { color: '#3b82f6', weight: 2, opacity: 0.8 };
-      const squareLineStyle = { color: '#3b82f6', weight: 1, opacity: 0.5, dashArray: '5, 5' };
+      const fieldLineStyle = { color: '#3b82f6', weight: 3, opacity: 0.9 };
+      const squareLineStyle = { color: '#60a5fa', weight: 1.5, opacity: 0.7 };
 
-      // Get map bounds with some padding for Austria region
-      const bounds = map.getBounds();
-      const minLat = Math.floor(bounds.getSouth());
-      const maxLat = Math.ceil(bounds.getNorth());
-      const minLng = Math.floor(bounds.getWest());
-      const maxLng = Math.ceil(bounds.getEast());
+      // Austria region bounds (with padding)
+      const minLat = 45;
+      const maxLat = 50;
+      const minLng = 8;
+      const maxLng = 18;
 
-      // Draw Field boundaries (20° lon x 10° lat) and labels
-      // Fields: longitude starts at -180, so field 0 = -180 to -160, field 9 (J) = 0 to 20
-      for (let lonField = 0; lonField < 18; lonField++) {
-        const fieldLonStart = -180 + (lonField * 20);
-        const fieldLonEnd = fieldLonStart + 20;
+      // For Austria, we're in fields IN, JN, KN (lon fields 9, 9, 10 and lat fields 4, 5, 6)
+      // Field J = longitude 0-20° (index 9), K = 20-40° (index 10)
+      // Field N = latitude 40-50° (index 13)
 
-        if (fieldLonEnd < minLng - 20 || fieldLonStart > maxLng + 20) continue;
+      // Draw vertical lines (longitude) - every 2° for squares
+      for (let lng = minLng; lng <= maxLng; lng += 2) {
+        const isFieldBoundary = (lng % 20 === 0);
+        const style = isFieldBoundary ? fieldLineStyle : squareLineStyle;
+        L.polyline([[minLat, lng], [maxLat, lng]], style).addTo(gridLayer);
+      }
 
-        for (let latField = 0; latField < 18; latField++) {
-          const fieldLatStart = -90 + (latField * 10);
-          const fieldLatEnd = fieldLatStart + 10;
+      // Draw horizontal lines (latitude) - every 1° for squares
+      for (let lat = minLat; lat <= maxLat; lat += 1) {
+        const isFieldBoundary = (lat % 10 === 0);
+        const style = isFieldBoundary ? fieldLineStyle : squareLineStyle;
+        L.polyline([[lat, minLng], [lat, maxLng]], style).addTo(gridLayer);
+      }
 
-          if (fieldLatEnd < minLat - 10 || fieldLatStart > maxLat + 10) continue;
+      // Add square labels (4-char: e.g., JN66, JN67)
+      for (let lng = minLng; lng < maxLng; lng += 2) {
+        for (let lat = minLat; lat < maxLat; lat += 1) {
+          const centerLat = lat + 0.5;
+          const centerLng = lng + 1;
 
-          const fieldName = getFieldName(lonField, latField);
+          // Calculate maidenhead square name
+          const lonField = Math.floor((lng + 180) / 20);
+          const latField = Math.floor((lat + 90) / 10);
+          const lonSquare = Math.floor(((lng + 180) % 20) / 2);
+          const latSquare = Math.floor((lat + 90) % 10);
 
-          // Draw field boundary lines
-          // Left edge
-          if (fieldLonStart >= minLng - 5 && fieldLonStart <= maxLng + 5) {
-            L.polyline([[fieldLatStart, fieldLonStart], [fieldLatEnd, fieldLonStart]], fieldLineStyle).addTo(gridLayer);
-          }
-          // Bottom edge
-          if (fieldLatStart >= minLat - 5 && fieldLatStart <= maxLat + 5) {
-            L.polyline([[fieldLatStart, fieldLonStart], [fieldLatStart, fieldLonEnd]], fieldLineStyle).addTo(gridLayer);
-          }
+          const squareName = getSquareName(lonField, latField, lonSquare, latSquare);
 
-          // Add field label at center
-          const fieldCenterLat = fieldLatStart + 5;
-          const fieldCenterLon = fieldLonStart + 10;
-          if (fieldCenterLat >= minLat && fieldCenterLat <= maxLat &&
-              fieldCenterLon >= minLng && fieldCenterLon <= maxLng) {
-            const fieldLabel = L.divIcon({
-              html: `<div class="grid-label grid-label-field">${fieldName}</div>`,
-              className: '',
-              iconSize: [40, 20],
-              iconAnchor: [20, 10]
-            });
-            L.marker([fieldCenterLat, fieldCenterLon], { icon: fieldLabel, interactive: false }).addTo(gridLayer);
-          }
-
-          // Draw Squares within this field (2° lon x 1° lat)
-          for (let lonSq = 0; lonSq < 10; lonSq++) {
-            const sqLonStart = fieldLonStart + (lonSq * 2);
-            const sqLonEnd = sqLonStart + 2;
-
-            if (sqLonEnd < minLng - 2 || sqLonStart > maxLng + 2) continue;
-
-            for (let latSq = 0; latSq < 10; latSq++) {
-              const sqLatStart = fieldLatStart + latSq;
-              const sqLatEnd = sqLatStart + 1;
-
-              if (sqLatEnd < minLat - 1 || sqLatStart > maxLat + 1) continue;
-
-              const squareName = getSquareName(lonField, latField, lonSq, latSq);
-
-              // Draw square boundary lines (skip if on field boundary)
-              if (lonSq > 0 && sqLonStart >= minLng && sqLonStart <= maxLng) {
-                L.polyline([[sqLatStart, sqLonStart], [sqLatEnd, sqLonStart]], squareLineStyle).addTo(gridLayer);
-              }
-              if (latSq > 0 && sqLatStart >= minLat && sqLatStart <= maxLat) {
-                L.polyline([[sqLatStart, sqLonStart], [sqLatStart, sqLonEnd]], squareLineStyle).addTo(gridLayer);
-              }
-
-              // Add square label at center
-              const sqCenterLat = sqLatStart + 0.5;
-              const sqCenterLon = sqLonStart + 1;
-              if (sqCenterLat >= minLat && sqCenterLat <= maxLat &&
-                  sqCenterLon >= minLng && sqCenterLon <= maxLng) {
-                const squareLabel = L.divIcon({
-                  html: `<div class="grid-label">${squareName}</div>`,
-                  className: '',
-                  iconSize: [36, 16],
-                  iconAnchor: [18, 8]
-                });
-                L.marker([sqCenterLat, sqCenterLon], { icon: squareLabel, interactive: false }).addTo(gridLayer);
-              }
-            }
-          }
+          const squareLabel = L.divIcon({
+            html: `<div class="grid-label">${squareName}</div>`,
+            className: '',
+            iconSize: [44, 18],
+            iconAnchor: [22, 9]
+          });
+          L.marker([centerLat, centerLng], { icon: squareLabel, interactive: false }).addTo(gridLayer);
         }
       }
 
@@ -727,7 +708,7 @@
       }).addTo(map);
 
       // Create grid layer
-      const gridLayer = createGridLayer(map);
+      const gridLayer = createGridLayer();
 
       // Check if grid should be shown from localStorage
       const showGrid = localStorage.getItem('showMaidenheadGrid') === 'true';
