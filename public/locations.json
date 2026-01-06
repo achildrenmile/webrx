@@ -32,14 +32,6 @@
     "info": "<b>Hardware</b>:<br><b>Antenna</b>:"
   },
   {
-    "id": 5,
-    "name": "<a href=\"https://www.qrz.com/db/OE8CXC\" target=\"_blank\">OE8CXC</a> WebRX Spittal JN66ss",
-    "lat": 46.789921,
-    "lng": 13.513257,
-    "sdrlink": "https://oe8cxc.webrx.at",
-    "info": "<b>Hardware</b>: Raspberry PI 4B+ / DVB-T Stick with RTL2832U - Patience is the key.<br><b>Antenna</b>: X300 <br><br><br>"
-  },
-  {
     "id": 6,
     "name": "<a href=\"https://www.qrz.com/db/OE8CNI\" target=\"_blank\">OE8CNI</a> WebRX Maria Rain JN76dn",
     "lat": 46.56,
