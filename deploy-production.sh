@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Deploy webrx to Synology NAS
 # Usage: ./deploy-production.sh
