@@ -36,7 +36,7 @@
     "name": "<a href=\"https://www.qrz.com/db/OE8CXC\" target=\"_blank\">OE8CXC</a> WebRX Spittal JN66ss",
     "lat": 46.789921,
     "lng": 13.513257,
-    "sdrlink": "https://oe8cxc.webrx.at",
+    "sdrlink": "http://185.68.251.71",
     "info": "<b>Hardware</b>: Raspberry PI 4B+ / RSP1a - Patience is the key.<br><b>Antennas</b>: X300 (VHF/UHF), 80m Monoband Dipol (HF) <br><br><br>"
   },
   {
