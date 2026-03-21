@@ -37,7 +37,7 @@
     "lat": 46.789921,
     "lng": 13.513257,
     "sdrlink": "https://oe8cxcwebrx.webrx.at",
-    "info": "<b>Hardware</b>: Raspberry PI 4B+ / RSP1a - Patience is the key.<br><b>Antennas</b>: X300 (VHF/UHF), 80m Monoband Dipol (HF) <br><br><br>"
+    "info": "<b>Hardware</b>: Raspberry PI 4B+ / SDRPlay RSPdx - Patience is the key.<br><b>Antennas</b>: X300 (VHF/UHF), 80m Monoband Dipol (HF) <br><br><br>"
   },
   {
     "id": 6,
