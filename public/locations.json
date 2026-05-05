@@ -72,14 +72,6 @@
     "info": "<b>Hardware</b>:<br><b>Antenna</b>:"
   },
   {
-    "id": 10,
-    "name": "<a href=\"https://www.qrz.com/db/OE8MPR\" target=\"_blank\">OE8MPR</a> Goesselsdorf, Austria | Loc: JN76hn, ASL: 490 m",
-    "lat": 46.562,
-    "lng": 14.625,
-    "sdrlink": "https://openwebrx.mpdx.at/",
-    "info": "<b> Hardware: </b>Server: Raspbery Pi 4<br>Receiver: 2x RTL-SDR <br>- Version 3 for 2m and DAB+<br>- Version 4 for Shortwave<br><b>Antenna:</b> Diamond D130NJ with Duplexer for both SDR Sticks<br><br>More informations on my website: <a href='https://www.mpdx.at'>www.mpdx.at</a></div>"
-  },
-  {
     "id": 11,
     "name": "<a href=\"https://www.qrz.com/db/OE8JHK\" target=\"_blank\">OE8JHK</a> Köttmannsdorf, Austria | Loc: JN76cn, ASL: 580 m",
     "lat": 46.562,
