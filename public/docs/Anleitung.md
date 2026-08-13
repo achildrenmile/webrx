@@ -229,7 +229,7 @@ Am Ende hinzufügen:
 
 Sende folgende Informationen per E-Mail an:
 
-📧 **admins@webrx.at**
+📧 **oe8yml@rednil.at**
 
 - Rufzeichen
 - Öffentlicher Link zum SDR
